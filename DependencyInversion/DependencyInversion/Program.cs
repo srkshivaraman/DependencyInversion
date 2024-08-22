@@ -1,16 +1,17 @@
 ﻿using DemoLibrary;
+using DependencyInversion;
 
 public class Program
 {
     private static void Main(string[] args)
     {
-        Person owner = new Person();
+        IPerson owner = Factory.CreatePerson();
         owner.FirstName = "Peter";
         owner.LastName = "Parker";
         owner.EmailAddress = "ceo@parkerindustries.com";
         owner.PhoneNumber = "9876543210";
 
-        Chore chore = new Chore();
+        IChore chore = Factory.CreateChore();
         chore.ChoreName = "Clean my room";
         chore.Owner= owner;
 

@@ -6,32 +6,38 @@ using System.Threading.Tasks;
 
 namespace DemoLibrary
 {
-    public class Chore
+    public class Chore : IChore
     {
+        private readonly ILogger logger;
+        private readonly IMessageSender messageSender;
+
         public string ChoreName { get; set; }
-        public Person Owner { get; set; }
+        public IPerson Owner { get; set; }
 
         public double HoursWorked { get; private set; }
 
         public bool IsComplete { get; private set; }
 
+        public Chore(ILogger logger,IMessageSender messageSender)
+        {
+            this.logger = logger;
+            this.messageSender = messageSender;
+        }
+
         public void CompleteChore()
         {
-            IsComplete = true;
-            Logger logger = new Logger();
+            IsComplete = true;            
             logger.Log($"Completed {ChoreName}");
-
-            Emailer emailer = new Emailer();
-            emailer.SendEmail(Owner, $"The chore {ChoreName} is complete.");
+           
+            messageSender.SendMessage(Owner, $"The chore {ChoreName} is complete.");
         }
 
         public void PerformedWork(double hours)
         {
             HoursWorked += hours;
-            Logger logger = new Logger();
             logger.Log($"Performed work on {ChoreName}");
         }
 
-    
+
     }
 }
